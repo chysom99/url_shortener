@@ -15,15 +15,15 @@ module.exports = async (req, res, next) => {
           req.user_id = result.id;
           next();
         } else {
-          return res.status(401).json({ messages: "inavlid token" });
+          return res.status(400).json({ messages: "inavlid token" });
         }
       } else {
-        return res.status(401).json({ messages: "inavlid token" });
+        return res.status(400).json({ messages: "inavlid token" });
       }
     } else {
-      return res.status(401).json({ messages: "inavlid token" });
+      return res.status(400).json({ messages: "inavlid token" });
     }
   } catch (err) {
-    return res.status(401).json({ messages: "inavlid token" });
+    return res.status(400).json({ messages: "inavlid token" });
   }
 };
