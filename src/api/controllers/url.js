@@ -7,13 +7,14 @@ const { isValidObjectId } = require("../../Utils/validate");
 const shorten = async (req, res) => {
   try {
     const { longUrl } = req.body;
-    const urlCode = shortid.generate();
+    //const urlCode = shortid.generate();
 
     if (!utils.validateUrl(longUrl)) {
-      return res.status(401).json({ message: "Invalid Long URL" });
+      return res.status(400).json({ message: "Invalid Long URL" });
     }
     let url = await Url.findOne({ longUrl });
     if (!url) {
+      const urlCode = shortid.generate();
       const shortUrl = baseUrl + "/" + urlCode;
       url = new Url({
         longUrl,
@@ -22,7 +23,6 @@ const shorten = async (req, res) => {
         date: new Date(),
       });
       url = await url.save();
-      return res.status(201).json(url);
     }
     return res.status(200).json(url);
   } catch (err) {
@@ -33,7 +33,7 @@ const shorten = async (req, res) => {
 const deleteurl = async (req, res) => {
   const { id } = req.params;
   if (!isValidObjectId(id))
-    return res.status(401).json({ message: "Url id is invalid" });
+    return res.status(400).json({ message: "Url id is invalid" });
   let url = await Url.findOneAndDelete({ _id: id });
   if (!url) return res.status(400).json({ message: "url not found" });
   else return res.status(200).json({ message: "url deleted" });
